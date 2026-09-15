@@ -12,6 +12,25 @@
     <button type="submit" style="font-size:1rem;padding:0.6rem 1rem">Registrar GitHub App Morada-hogar</button>
   </form>
   <p>Después instálala en <strong>un solo</strong> repositorio. GitHub vuelve a una página estable con el código. El watcher abre el PR.</p>
+  <p style="margin-top:1.5rem">Si el repo vive en una organización, regístrala ahí. Una App privada solo se instala en la cuenta que la posee.</p>
+  <form id="org-manifest" method="post">
+    <input type="hidden" name="manifest" value="{&quot;name&quot;:&quot;Morada-hogar&quot;,&quot;url&quot;:&quot;https://sense-removal-ross-chancellor.trycloudflare.com&quot;,&quot;description&quot;:&quot;Hogar en la nube para el agente que ya pagas.&quot;,&quot;public&quot;:false,&quot;hook_attributes&quot;:{&quot;url&quot;:&quot;https://smee.io/9OyLVhZFaNf4hYcp&quot;,&quot;active&quot;:true},&quot;redirect_url&quot;:&quot;https://cdn.jsdelivr.net/gh/Kasempiternal/morada-catch@aa5fed7d0bf361070debb67110e4d986ff166911/catch.html&quot;,&quot;callback_urls&quot;:[&quot;http://127.0.0.1:43147/api/auth/github/callback&quot;,&quot;https://sense-removal-ross-chancellor.trycloudflare.com/api/auth/github/callback&quot;],&quot;request_oauth_on_install&quot;:false,&quot;default_events&quot;:[&quot;installation&quot;,&quot;installation_repositories&quot;,&quot;push&quot;,&quot;pull_request&quot;],&quot;default_permissions&quot;:{&quot;contents&quot;:&quot;write&quot;,&quot;pull_requests&quot;:&quot;write&quot;,&quot;metadata&quot;:&quot;read&quot;}}">
+    <p>
+      <label for="org">Organización</label><br>
+      <input id="org" name="org" autocomplete="off" required placeholder="mi-org" style="font-size:1rem;padding:0.4rem;width:100%;max-width:16rem">
+    </p>
+    <button type="submit" style="font-size:1rem;padding:0.6rem 1rem">Registrar en esa organización</button>
+  </form>
   <p style="font-size:0.9rem;color:#52525b">Esta página no pasa por Cloudflare. Si el botón no responde, entra en GitHub y pulsa otra vez.</p>
+  <script>
+    document.getElementById("org-manifest").addEventListener("submit", function (event) {
+      var org = (this.org.value || "").trim();
+      if (!/^[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$/.test(org)) {
+        event.preventDefault();
+        return;
+      }
+      this.action = "https://github.com/organizations/" + encodeURIComponent(org) + "/settings/apps/new";
+    });
+  </script>
 </body>
 </html>

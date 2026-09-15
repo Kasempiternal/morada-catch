@@ -6,10 +6,10 @@
   <title>Morada · Registrar GitHub App</title>
 </head>
 <body style="font-family:system-ui,sans-serif;max-width:32rem;margin:2rem auto;padding:0 1rem;line-height:1.45">
-  <p>Si este navegador no tiene tu GitHub, entra primero. GitHub te devuelve aquí y entonces se envía el formulario. Un POST sin sesión deja Create vacío.</p>
-  <p><a id="login" href="https://github.com/login" style="font-size:1rem">Entra en GitHub</a></p>
+  <p>Si este navegador no tiene tu GitHub, ábrelo en otra pestaña, entra, y vuelve aquí. Un POST sin sesión deja Create vacío.</p>
+  <p><a id="login" href="https://github.com/login" target="_blank" rel="noopener" style="font-size:1rem">Entra en GitHub (otra pestaña)</a></p>
   <ol>
-    <li>Si ya estás dentro, pulsa <strong>Registrar GitHub App Morada-nube</strong>.</li>
+    <li>Cuando ya hayas entrado, pulsa <strong>Registrar GitHub App Morada-nube</strong>.</li>
     <li>GitHub muestra un formulario ya relleno. Pulsa <strong>Create GitHub App</strong>. No cierres esa pantalla.</li>
     <li>Instálala en <strong>un solo</strong> repositorio. El watcher abre el PR.</li>
   </ol>
@@ -50,14 +50,6 @@
   </form>
   <p style="font-size:0.9rem;color:#52525b">Esta página no pasa por Cloudflare. Si el botón no responde, entra en GitHub y pulsa otra vez.</p>
   <script>
-    (function () {
-      var here = location.href.split("?")[0].split("#")[0] + "?authed=1";
-      document.getElementById("login").href =
-        "https://github.com/login?return_to=" + encodeURIComponent(here);
-      if (/(?:^|[?&])authed=1(?:&|$)/.test(location.search)) {
-        document.getElementById("manifest").submit();
-      }
-    })();
     document.getElementById("org-manifest").addEventListener("submit", function (event) {
       var org = (this.org.value || "").trim();
       if (!/^[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$/.test(org)) {

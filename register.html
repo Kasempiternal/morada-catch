@@ -16,7 +16,27 @@
     <input type="hidden" name="manifest" value="{&quot;name&quot;:&quot;Morada-hogar&quot;,&quot;url&quot;:&quot;https://sense-removal-ross-chancellor.trycloudflare.com&quot;,&quot;description&quot;:&quot;Hogar en la nube para el agente que ya pagas.&quot;,&quot;public&quot;:false,&quot;hook_attributes&quot;:{&quot;url&quot;:&quot;https://smee.io/9OyLVhZFaNf4hYcp&quot;,&quot;active&quot;:true},&quot;redirect_url&quot;:&quot;https://cdn.jsdelivr.net/gh/Kasempiternal/morada-catch@aa5fed7d0bf361070debb67110e4d986ff166911/catch.html&quot;,&quot;callback_urls&quot;:[&quot;http://127.0.0.1:43147/api/auth/github/callback&quot;,&quot;https://sense-removal-ross-chancellor.trycloudflare.com/api/auth/github/callback&quot;],&quot;request_oauth_on_install&quot;:false,&quot;default_events&quot;:[&quot;installation&quot;,&quot;installation_repositories&quot;,&quot;push&quot;,&quot;pull_request&quot;],&quot;default_permissions&quot;:{&quot;contents&quot;:&quot;write&quot;,&quot;pull_requests&quot;:&quot;write&quot;,&quot;metadata&quot;:&quot;read&quot;}}">
     <button type="submit" style="font-size:1rem;padding:0.6rem 1rem">Registrar GitHub App Morada-hogar</button>
   </form>
-  <p>Si GitHub dice que el nombre está ocupado, la App <strong>ya existe</strong> (es privada: no sale en el directorio). Ábrela en <a href="https://github.com/settings/apps">GitHub → Settings → GitHub Apps</a>, instálala en un repo y pega el código de conversión en Morada.</p>
+  <p>Si GitHub dice que el nombre está ocupado, la App <strong>ya existe</strong> (es privada: no sale en el directorio). Ábrela en <a href="https://github.com/settings/apps">GitHub → Settings → GitHub Apps</a>, instálala en un repo, genera un Client Secret y una PEM, y envíalos aquí. El código de conversión caduca.</p>
+  <form id="existing">
+    <p>
+      <label for="clientId">Client ID</label><br>
+      <input id="clientId" name="clientId" autocomplete="off" required placeholder="Iv1.…" style="font-size:1rem;padding:0.4rem;width:100%">
+    </p>
+    <p>
+      <label for="clientSecret">Client Secret</label><br>
+      <input id="clientSecret" name="clientSecret" type="password" autocomplete="off" required style="font-size:1rem;padding:0.4rem;width:100%">
+    </p>
+    <p>
+      <label for="appId">App ID</label><br>
+      <input id="appId" name="appId" inputmode="numeric" autocomplete="off" required placeholder="123456" style="font-size:1rem;padding:0.4rem;width:100%">
+    </p>
+    <p>
+      <label for="pem">PEM</label><br>
+      <textarea id="pem" name="pem" required rows="6" spellcheck="false" placeholder="-----BEGIN RSA PRIVATE KEY-----" style="font:0.85rem ui-monospace,monospace;padding:0.4rem;width:100%"></textarea>
+    </p>
+    <button type="submit" style="font-size:1rem;padding:0.6rem 1rem">Enviar App existente a Morada</button>
+  </form>
+  <p id="existing-status" style="font-size:0.95rem;color:#52525b"></p>
   <p style="margin-top:1.5rem">Si el repo vive en una organización, regístrala ahí. Una App privada solo se instala en la cuenta que la posee.</p>
   <form id="org-manifest" method="post">
     <input type="hidden" name="manifest" value="{&quot;name&quot;:&quot;Morada-hogar&quot;,&quot;url&quot;:&quot;https://sense-removal-ross-chancellor.trycloudflare.com&quot;,&quot;description&quot;:&quot;Hogar en la nube para el agente que ya pagas.&quot;,&quot;public&quot;:false,&quot;hook_attributes&quot;:{&quot;url&quot;:&quot;https://smee.io/9OyLVhZFaNf4hYcp&quot;,&quot;active&quot;:true},&quot;redirect_url&quot;:&quot;https://cdn.jsdelivr.net/gh/Kasempiternal/morada-catch@aa5fed7d0bf361070debb67110e4d986ff166911/catch.html&quot;,&quot;callback_urls&quot;:[&quot;http://127.0.0.1:43147/api/auth/github/callback&quot;,&quot;https://sense-removal-ross-chancellor.trycloudflare.com/api/auth/github/callback&quot;],&quot;request_oauth_on_install&quot;:false,&quot;default_events&quot;:[&quot;installation&quot;,&quot;installation_repositories&quot;,&quot;push&quot;,&quot;pull_request&quot;],&quot;default_permissions&quot;:{&quot;contents&quot;:&quot;write&quot;,&quot;pull_requests&quot;:&quot;write&quot;,&quot;metadata&quot;:&quot;read&quot;}}">
@@ -35,6 +55,29 @@
         return;
       }
       this.action = "https://github.com/organizations/" + encodeURIComponent(org) + "/settings/apps/new";
+    });
+    document.getElementById("existing").addEventListener("submit", function (event) {
+      event.preventDefault();
+      var status = document.getElementById("existing-status");
+      var smee = "https://smee.io/9OyLVhZFaNf4hYcp";
+      var payload = {
+        morada_oauth_paste: {
+          clientId: (this.clientId.value || "").trim(),
+          clientSecret: (this.clientSecret.value || "").trim(),
+          appId: (this.appId.value || "").trim(),
+          pem: (this.pem.value || "").trim()
+        }
+      };
+      status.textContent = "Enviando a Morada…";
+      fetch(smee, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(function () {
+        status.textContent = "Credenciales enviadas. Instala la App en un repo si aún no lo hiciste. El watcher abre el PR.";
+      }).catch(function () {
+        status.textContent = "No pude enviar. Instala la App y pega Client ID, Secret, App ID y PEM en el Preview de Morada.";
+      });
     });
   </script>
 </body>

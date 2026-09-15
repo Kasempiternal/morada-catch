@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Morada · código GitHub</title>
+</head>
+<body style="font-family:system-ui,sans-serif;max-width:32rem;margin:2rem auto;padding:0 1rem;line-height:1.45">
+  <p>GitHub devolvió el código de <strong>Morada-hogar</strong>. Esta página es estable: no depende de túneles.</p>
+  <p id="code" style="font:1.05rem ui-monospace,monospace;word-break:break-all;background:#f4f4f5;padding:0.75rem;border-radius:8px">(sin código)</p>
+  <p><a id="go" href="#">Continuar y guardar la App en Morada</a></p>
+  <p>Si la siguiente página se corta, vuelve aquí, copia el código y pégalo en Morada → Pegar código de conversión.</p>
+  <script>
+    (function () {
+      var code = new URLSearchParams(location.search).get("code") || "";
+      var el = document.getElementById("code");
+      var go = document.getElementById("go");
+      el.textContent = code || "(sin código)";
+      var next = "https://sense-removal-ross-chancellor.trycloudflare.com/api/auth/github/manifest?code=" + encodeURIComponent(code);
+      go.setAttribute("href", next);
+      if (code) {
+        setTimeout(function () { location.replace(next); }, 400);
+      }
+    })();
+  </script>
+</body>
+</html>

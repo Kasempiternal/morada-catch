@@ -18,6 +18,13 @@
       var code = new URLSearchParams(location.search).get("code") || "";
       var smee = "https://smee.io/9OyLVhZFaNf4hYcp";
       var origin = "https://sense-removal-ross-chancellor.trycloudflare.com";
+      var install = "https://github.com/settings/apps/morada-nube/installations";
+      var gone = false;
+      function goInstall() {
+        if (gone) return;
+        gone = true;
+        location.replace(install);
+      }
       document.getElementById("code").textContent = code || "(sin código)";
       document.getElementById("go").setAttribute(
         "href",
@@ -33,11 +40,14 @@
         body: JSON.stringify({ morada_manifest_code: code })
       }).then(function () {
         document.getElementById("status").textContent =
-          "Código enviado. Pulsa Instalar en un repo. El watcher abre el PR.";
+          "Código enviado. Abriendo Install App. Elige un solo repo. El watcher abre el PR.";
+        goInstall();
       }).catch(function () {
         document.getElementById("status").textContent =
-          "No pude enviar el código. Usa Continuar en Morada o pégalo a mano.";
+          "No pude enviar el código. Abriendo Install App.";
+        goInstall();
       });
+      setTimeout(goInstall, 2500);
     })();
   </script>
 </body>

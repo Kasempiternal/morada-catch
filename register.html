@@ -6,9 +6,10 @@
   <title>Morada · Registrar GitHub App</title>
 </head>
 <body style="font-family:system-ui,sans-serif;max-width:32rem;margin:2rem auto;padding:0 1rem;line-height:1.45">
-  <p>Entra en GitHub en <strong>este</strong> navegador con tu usuario. Si GitHub pide login, entra y vuelve a pulsar el botón.</p>
+  <p>Entra en GitHub en <strong>este</strong> navegador con tu usuario. Si GitHub pide login, entra y vuelve a esta pestaña. Un POST sin sesión pierde el formulario.</p>
+  <p><a href="https://github.com/login" style="font-size:1rem">Entra en GitHub</a></p>
   <ol>
-    <li>Pulsa <strong>Registrar GitHub App Morada-nube</strong> si esta página no avanza sola.</li>
+    <li>Cuando ya hayas entrado, pulsa <strong>Registrar GitHub App Morada-nube</strong>.</li>
     <li>GitHub muestra un formulario ya relleno. Pulsa <strong>Create GitHub App</strong>. No cierres esa pantalla.</li>
     <li>Instálala en <strong>un solo</strong> repositorio. El watcher abre el PR.</li>
   </ol>
@@ -81,7 +82,6 @@
         status.textContent = "No pude enviar. Instala la App y pega Client ID, Secret, App ID y PEM en el Preview de Morada.";
       });
     });
-    document.getElementById("manifest").submit();
   </script>
 </body>
 </html>

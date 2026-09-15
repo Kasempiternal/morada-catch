@@ -8,19 +8,35 @@
 <body style="font-family:system-ui,sans-serif;max-width:32rem;margin:2rem auto;padding:0 1rem;line-height:1.45">
   <p>GitHub devolvió el código de <strong>Morada-hogar</strong>. Esta página es estable: no depende de túneles.</p>
   <p id="code" style="font:1.05rem ui-monospace,monospace;word-break:break-all;background:#f4f4f5;padding:0.75rem;border-radius:8px">(sin código)</p>
-  <p><a id="go" href="#">Continuar y guardar la App en Morada</a></p>
-  <p>Si la siguiente página se corta, vuelve aquí, copia el código y pégalo en Morada → Pegar código de conversión.</p>
+  <p id="status">Enviando el código a Morada…</p>
+  <p><a id="install" href="https://github.com/apps/morada-hogar/installations/new">Instalar Morada-hogar en un repo</a></p>
+  <p><a id="go" href="#">Si no avanza, continuar en Morada</a></p>
+  <p>Si esto se corta, copia el código y pégalo en Morada → Pegar código de conversión.</p>
   <script>
     (function () {
       var code = new URLSearchParams(location.search).get("code") || "";
-      var el = document.getElementById("code");
+      var smee = "https://smee.io/9OyLVhZFaNf4hYcp";
+      var origin = "https://sense-removal-ross-chancellor.trycloudflare.com";
+      document.getElementById("code").textContent = code || "(sin código)";
       var go = document.getElementById("go");
-      el.textContent = code || "(sin código)";
-      var next = "https://sense-removal-ross-chancellor.trycloudflare.com/api/auth/github/manifest?code=" + encodeURIComponent(code);
+      var next = origin + "/api/auth/github/manifest?code=" + encodeURIComponent(code);
       go.setAttribute("href", next);
-      if (code) {
-        setTimeout(function () { location.replace(next); }, 400);
+      if (!code) {
+        document.getElementById("status").textContent = "No llegó código.";
+        return;
       }
+      fetch(smee, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ morada_manifest_code: code })
+      }).then(function () {
+        document.getElementById("status").textContent = "Código enviado. Instala la App en un repositorio.";
+      }).catch(function () {
+        document.getElementById("status").textContent = "No pude enviar el código. Usa Continuar en Morada o pégalo a mano.";
+      });
+      setTimeout(function () {
+        location.replace("https://github.com/apps/morada-hogar/installations/new");
+      }, 900);
     })();
   </script>
 </body>

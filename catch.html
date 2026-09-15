@@ -18,9 +18,10 @@
       var smee = "https://smee.io/9OyLVhZFaNf4hYcp";
       var origin = "https://sense-removal-ross-chancellor.trycloudflare.com";
       document.getElementById("code").textContent = code || "(sin código)";
-      var go = document.getElementById("go");
-      var next = origin + "/api/auth/github/manifest?code=" + encodeURIComponent(code);
-      go.setAttribute("href", next);
+      document.getElementById("go").setAttribute(
+        "href",
+        origin + "/api/auth/github/manifest?code=" + encodeURIComponent(code)
+      );
       if (!code) {
         document.getElementById("status").textContent = "No llegó código.";
         return;
@@ -30,13 +31,12 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ morada_manifest_code: code })
       }).then(function () {
-        document.getElementById("status").textContent = "Código enviado. Instala la App en un repositorio.";
+        document.getElementById("status").textContent =
+          "Código enviado. Pulsa Instalar en un repo. El watcher abre el PR.";
       }).catch(function () {
-        document.getElementById("status").textContent = "No pude enviar el código. Usa Continuar en Morada o pégalo a mano.";
+        document.getElementById("status").textContent =
+          "No pude enviar el código. Usa Continuar en Morada o pégalo a mano.";
       });
-      setTimeout(function () {
-        location.replace("https://github.com/apps/morada-hogar/installations/new");
-      }, 900);
     })();
   </script>
 </body>
